@@ -1,0 +1,62 @@
+function checkCashRegister(price, cash, cid) {
+  const currencyValues = {
+    'PENNY': 0.01,
+    'NICKEL': 0.05,
+    'DIME': 0.1,
+    'QUARTER': 0.25,
+    'ONE': 1,
+    'FIVE': 5,
+    'TEN': 10,
+    'TWENTY': 20,
+    'ONE HUNDRED': 100,
+  };
+
+  let change = cash - price;
+  let changeLeft = change;
+  let result = { status: '', change: [] };
+  let totalCID = 0;
+
+  cid.forEach(element => {
+    totalCID += element[1];
+  });
+
+  totalCID = Math.round(totalCID * 100) / 100;
+
+  if (totalCID < change) {
+    result.status = 'INSUFFICIENT_FUNDS';
+    return result;
+  }
+
+  if (totalCID === change) {
+    result.status = 'CLOSED';
+    result.change = cid;
+    return result;
+  }
+
+  cid = cid.reverse();
+
+  let changeArr = cid.reduce((acc, element) => {
+    let value = 0;
+    while (changeLeft >= currencyValues[element[0]] && element[1] > 0) {
+      value += currencyValues[element[0]];
+      changeLeft -= currencyValues[element[0]];
+      element[1] -= currencyValues[element[0]];
+      changeLeft = Math.round(changeLeft * 100) / 100;
+    }
+
+    if (value > 0) {
+      acc.push([element[0], value]);
+    }
+
+    return acc;
+  }, []);
+
+  if (changeArr.length < 1 || changeLeft > 0) {
+    result.status = 'INSUFFICIENT_FUNDS';
+    return result;
+  }
+
+  result.status = 'OPEN';
+  result.change = changeArr;
+  return result;
+}
