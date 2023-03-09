@@ -1,0 +1,15 @@
+// Setup
+const myDog = {
+  "name": "Coder",
+  "legs": 4,
+  "tails": 1,
+  "friends": ["freeCodeCamp Campers"]
+};
+
+// Only change code below this 
+
+myDog.name = "Happy Coder";
+
+/**
+* Your test output will go here
+*/
